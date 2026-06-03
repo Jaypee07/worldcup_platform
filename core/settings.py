@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-ail)zfa_!slr5tggh%$mj@lj(hrefz1kwl_x0cyu5g=^&7y6sl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "100.49.126.221",
+    "wc2026predictor.online",
+    "www.wc2026predictor.online",
+]
 
 
 # Application definition
