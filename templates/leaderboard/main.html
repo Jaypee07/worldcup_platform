@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaderboard — WC2026 Predictor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Leaderboard</h1>
+    <p>Rankings per tier. Only paid players appear.</p>
+</div>
+
+{% for item in tier_data %}
+<div style="margin-bottom:2.5rem;">
+    <div style="display:flex; align-items:center; justify-content:space-between;
+                margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <h2 style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem;
+                   color:var(--teal); letter-spacing:1px;">
+            {{ item.tier.name }}
+            <span style="font-size:1rem; color:var(--grey);
+                         font-weight:400; font-family:'Inter',sans-serif;">
+                — ₦{{ item.tier.entry_fee|floatformat:0 }} entry
+            </span>
+        </h2>
+        <div style="font-size:0.85rem; color:var(--grey);">
+            Prize pool:
+            <strong style="color:var(--green);">
+                ₦{{ item.tier.prize_pool|floatformat:0 }}
+            </strong>
+        </div>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:60px;">Rank</th>
+                    <th>Player</th>
+                    <th style="text-align:right;">Points</th>
+                    <th style="text-align:right;">Prize</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in item.entries %}
+                {% if entry.user == request.user %}
+                <tr style="background:#FEF3C7;">
+                {% else %}
+                <tr>
+                {% endif %}
+                    <td>
+                        {% if entry.rank == 1 %}
+                            <span style="font-size:1.25rem;">🥇</span>
+                        {% elif entry.rank == 2 %}
+                            <span style="font-size:1.25rem;">🥈</span>
+                        {% elif entry.rank == 3 %}
+                            <span style="font-size:1.25rem;">🥉</span>
+                        {% elif entry.rank <= 5 %}
+                            <span class="badge badge-gold">{{ entry.rank }}</span>
+                        {% else %}
+                            <span class="badge badge-grey">{{ entry.rank }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <strong>{{ entry.user.username }}</strong>
+                        {% if entry.user == request.user %}
+                            <span style="font-size:0.75rem; color:var(--gold);
+                                         font-weight:600; margin-left:0.5rem;">
+                                You
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align:right;">
+                        <strong style="font-size:1rem; color:var(--teal);">
+                            {{ entry.total_points }}
+                        </strong>
+                        <span style="font-size:0.75rem; color:var(--grey);">pts</span>
+                    </td>
+                    <td style="text-align:right; font-size:0.85rem;">
+                        {% if entry.rank == 1 %}
+                            <span style="color:var(--green); font-weight:700;">
+                                ₦{{ item.tier.first_prize|floatformat:0 }}
+                            </span>
+                        {% elif entry.rank == 2 %}
+                            <span style="color:var(--grey); font-weight:700;">
+                                ₦{{ item.tier.second_prize|floatformat:0 }}
+                            </span>
+                        {% elif entry.rank == 3 %}
+                            <span style="color:var(--grey); font-weight:700;">
+                                ₦{{ item.tier.third_prize|floatformat:0 }}
+                            </span>
+                        {% else %}
+                            <span style="color:var(--grey);">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align:center;
+                        color:var(--grey); padding:2rem;">
+                        No players yet. Be the first to join this tier.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% empty %}
+<div class="card" style="text-align:center; padding:3rem;">
+    <p style="color:var(--grey);">No tiers set up yet.</p>
+</div>
+{% endfor %}
+{% endblock %}

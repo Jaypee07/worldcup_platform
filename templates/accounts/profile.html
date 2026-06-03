@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile — WC2026 Predictor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>My Profile</h1>
+    <p>Your account details and stats</p>
+</div>
+
+<div class="grid-2">
+    <div class="card">
+        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.25rem;
+                   color:var(--teal); margin-bottom:1rem; letter-spacing:1px;">
+            Account Info
+        </h3>
+        <table>
+            <tr>
+                <td style="color:var(--grey); width:40%;">Username</td>
+                <td><strong>{{ user.username }}</strong></td>
+            </tr>
+            <tr>
+                <td style="color:var(--grey);">Email</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <td style="color:var(--grey);">Member since</td>
+                <td>{{ user.date_joined|date:"d M Y" }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.25rem;
+                   color:var(--teal); margin-bottom:1rem; letter-spacing:1px;">
+            Quick Links
+        </h3>
+        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+            <a href="{% url 'predictions:my_predictions' %}" class="btn btn-secondary">
+                My Predictions
+<a href="{% url 'leaderboard:home' %}" class="btn btn-outline">
+    Leaderboard
+</a>
+            <a href="{% url 'predictions:group' %}" class="btn btn-primary">
+                Make Predictions
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

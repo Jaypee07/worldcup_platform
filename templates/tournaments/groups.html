@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Groups — WC2026 Predictor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Group Stage</h1>
+    <p>12 groups. 48 teams. The journey begins.</p>
+</div>
+
+<div class="grid-3">
+    {% for group in groups %}
+    <div class="card">
+        <div style="display:flex; justify-content:space-between;
+                    align-items:center; margin-bottom:1rem;">
+            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.4rem;
+                       color:var(--teal); letter-spacing:1px;">
+                Group {{ group.name }}
+            </h3>
+            <a href="{% url 'tournaments:group_detail' group.name %}"
+               style="font-size:0.8rem; color:var(--red); font-weight:600;
+                      text-decoration:none;">
+                View →
+            </a>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.5rem;">
+            {% for team in group.teams.all %}
+            <div style="display:flex; align-items:center; gap:0.75rem;
+                        padding:0.5rem; border-radius:6px; background:var(--offwhite);">
+                <span style="font-size:1.1rem;">{{ team.flag }}</span>
+                <span style="font-size:0.875rem; font-weight:500;">{{ team.name }}</span>
+                <span style="margin-left:auto; font-size:0.75rem;
+                             color:var(--grey); font-weight:600;">
+                    {{ team.code }}
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="card" style="grid-column: 1/-1; text-align:center; padding:3rem;">
+        <p style="color:var(--grey);">Groups not set up yet. Check back soon.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

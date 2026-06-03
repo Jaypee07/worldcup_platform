@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}My Predictions — WC2026 Predictor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>My Predictions</h1>
+    <p>All your submitted predictions and points earned.</p>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Match</th>
+                <th>Competition</th>
+                <th>Your Prediction</th>
+                <th>Result</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pred in predictions %}
+            <tr>
+                <td>
+                    <strong>
+                        {{ pred.match.home_team.flag }}
+                        {{ pred.match.home_team.name }}
+                        vs
+                        {{ pred.match.away_team.flag }}
+                        {{ pred.match.away_team.name }}
+                    </strong>
+                    <div style="font-size:0.75rem; color:var(--grey);">
+                        {{ pred.match.kickoff_time|date:"d M Y" }}
+                    </div>
+                </td>
+                <td>
+                    <span class="badge badge-grey">
+                        {{ pred.competition.name }}
+                    </span>
+                </td>
+                <td>
+                    {% if pred.predicted_home_score is not None %}
+                        <strong style="color:var(--teal);">
+                            {{ pred.predicted_home_score }}
+                            —
+                            {{ pred.predicted_away_score }}
+                        </strong>
+                    {% elif pred.predicted_winner %}
+                        <strong style="color:var(--teal);">
+                            {{ pred.predicted_winner.flag }}
+                            {{ pred.predicted_winner.name }}
+                        </strong>
+                    {% else %}
+                        <span style="color:var(--grey);">—</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if pred.match.status == 'completed' %}
+                        <strong>
+                            {{ pred.match.home_score }}
+                            —
+                            {{ pred.match.away_score }}
+                        </strong>
+                    {% else %}
+                        <span style="color:var(--grey);">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if pred.is_scored %}
+                        {% if pred.points_awarded > 0 %}
+                            <span class="badge badge-green">
+                                +{{ pred.points_awarded }}
+                            </span>
+                        {% else %}
+                            <span class="badge badge-red">0</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge badge-grey">—</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align:center;
+                    color:var(--grey); padding:2rem;">
+                    No predictions yet.
+                    <a href="{% url 'predictions:group' %}"
+                       style="color:var(--red); font-weight:600;">
+                        Start predicting →
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

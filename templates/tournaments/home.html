@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+
+{% block title %}Home — WC2026 Predictor{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<div style="background: linear-gradient(135deg, var(--teal) 0%, #0d2020 100%);
+            border-radius: 16px; padding: 3rem 2rem; text-align: center;
+            margin-bottom: 2rem; position: relative; overflow: hidden;">
+
+    <div style="position: absolute; top: -20px; right: -20px;
+                font-size: 8rem; opacity: 0.05;">⚽</div>
+
+    <p style="color: var(--gold); font-size: 0.85rem; font-weight: 700;
+              letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.75rem;">
+        FIFA World Cup 2026
+    </p>
+    <h1 style="font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem;
+               color: var(--white); letter-spacing: 2px; line-height: 1.1;
+               margin-bottom: 1rem;">
+        Predict. Compete. Win.
+    </h1>
+    <p style="color: rgba(255,255,255,0.75); font-size: 1rem;
+              max-width: 520px; margin: 0 auto 2rem;">
+        Predict group stage scores and knockout winners.
+        Join a prize tier and compete on the leaderboard
+        across the biggest tournament on earth.
+    </p>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'payments:tiers' %}" class="btn btn-primary"
+           style="font-size: 1rem; padding: 0.875rem 2rem; margin-right: 0.75rem;">
+            Join a Tier
+        </a>
+        <a href="{% url 'leaderboard:home' %}" class="btn"
+           style="font-size: 1rem; padding: 0.875rem 2rem;
+                  background: rgba(255,255,255,0.1); color: var(--white);">
+            Leaderboard
+        </a>
+    {% else %}
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary"
+           style="font-size: 1rem; padding: 0.875rem 2rem; margin-right: 0.75rem;">
+            Join Free
+        </a>
+        <a href="{% url 'accounts:login' %}" class="btn"
+           style="font-size: 1rem; padding: 0.875rem 2rem;
+                  background: rgba(255,255,255,0.1); color: var(--white);">
+            Log In
+        </a>
+    {% endif %}
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="page-header">
+    <h1>How It Works</h1>
+    <p>One competition. Points accumulate. Top 3 win.</p>
+</div>
+
+<div class="grid-3" style="margin-bottom: 2.5rem;">
+    <div class="card" style="text-align: center; padding: 2rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚽</div>
+        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.2rem;
+                   color:var(--teal); letter-spacing:1px; margin-bottom:0.5rem;">
+            1. Join a Tier
+        </h3>
+        <p style="color:var(--grey); font-size:0.875rem; line-height:1.6;">
+            Choose from ₦1,000, ₦3,000, or ₦5,000 entry tiers.
+            Each tier has its own leaderboard and prize pool.
+            Pay once and compete for the full tournament.
+        </p>
+    </div>
+
+    <div class="card" style="text-align: center; padding: 2rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎯</div>
+        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.2rem;
+                   color:var(--teal); letter-spacing:1px; margin-bottom:0.5rem;">
+            2. Predict Matches
+        </h3>
+        <p style="color:var(--grey); font-size:0.875rem; line-height:1.6;">
+            Predict exact scores for every group stage match.
+            When the knockout stage begins, predict match winners.
+            All points add up on one leaderboard.
+        </p>
+    </div>
+
+    <div class="card" style="text-align: center; padding: 2rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏆</div>
+        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.2rem;
+                   color:var(--teal); letter-spacing:1px; margin-bottom:0.5rem;">
+            3. Win Prizes
+        </h3>
+        <p style="color:var(--grey); font-size:0.875rem; line-height:1.6;">
+            80% of each tier's pot is split among the top 3.
+            1st gets 50%, 2nd gets 30%, 3rd gets 20%.
+            The more people join, the bigger the prize.
+        </p>
+    </div>
+</div>
+
+<!-- SCORING -->
+<div class="card" style="margin-bottom: 2.5rem;">
+    <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.4rem;
+               color:var(--teal); letter-spacing:1px; margin-bottom:1.25rem;">
+        Scoring System
+    </h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Stage</th>
+                <th>Prediction Type</th>
+                <th>Correct</th>
+                <th>Incorrect</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+    <td>Group Stage</td>
+    <td>Exact score</td>
+    <td><span class="badge badge-green">+5 pts</span></td>
+    <td><span class="badge badge-grey">0 pts</span></td>
+</tr>
+<tr>
+    <td>Group Stage</td>
+    <td>Correct outcome (W/D/L)</td>
+    <td><span class="badge badge-green">+3 pts</span></td>
+    <td><span class="badge badge-grey">0 pts</span></td>
+</tr>
+                <td>Knockout</td>
+                <td>Pick the winner</td>
+                <td><span class="badge badge-green">+2 pts</span></td>
+                <td><span class="badge badge-grey">0 pts</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top:1.25rem; padding:1rem; background:var(--offwhite);
+                border-radius:8px; border-left:4px solid var(--gold);">
+        <p style="font-size:0.875rem; color:var(--dark);">
+            <strong>Referral Bonus:</strong>
+            Earn <strong>20%</strong> of every entry fee paid by someone
+            you refer. Balance can be used to pay your own entry fee.
+        </p>
+    </div>
+</div>
+
+<!-- TIERS PREVIEW -->
+<div class="page-header">
+    <h1>Prize Tiers</h1>
+    <p>Pick your level. The bigger the stake, the bigger the prize.</p>
+</div>
+
+<div class="grid-3" style="margin-bottom: 2.5rem;">
+    <div class="card" style="text-align:center; padding:2rem;
+                              border-top:4px solid var(--teal);">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.3rem;
+                    color:var(--teal); letter-spacing:1px;">Tier 1</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:2.5rem;
+                    color:var(--dark);">₦1,000</div>
+        <div style="font-size:0.8rem; color:var(--grey); margin-bottom:1rem;">
+            entry fee
+        </div>
+        <a href="{% url 'payments:tiers' %}" class="btn btn-outline"
+           style="width:100%;">Join</a>
+    </div>
+
+    <div class="card" style="text-align:center; padding:2rem;
+                              border-top:4px solid var(--gold);">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.3rem;
+                    color:var(--gold); letter-spacing:1px;">Tier 2</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:2.5rem;
+                    color:var(--dark);">₦3,000</div>
+        <div style="font-size:0.8rem; color:var(--grey); margin-bottom:1rem;">
+            entry fee
+        </div>
+        <a href="{% url 'payments:tiers' %}" class="btn btn-outline"
+           style="width:100%;">Join</a>
+    </div>
+
+    <div class="card" style="text-align:center; padding:2rem;
+                              border-top:4px solid var(--red);">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.3rem;
+                    color:var(--red); letter-spacing:1px;">Tier 3</div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:2.5rem;
+                    color:var(--dark);">₦5,000</div>
+        <div style="font-size:0.8rem; color:var(--grey); margin-bottom:1rem;">
+            entry fee
+        </div>
+        <a href="{% url 'payments:tiers' %}" class="btn btn-outline"
+           style="width:100%;">Join</a>
+    </div>
+</div>
+
+<!-- REFERRAL PROMO -->
+<div class="card" style="margin-bottom:2.5rem; background:var(--teal);
+                          color:var(--white);">
+    <div style="display:flex; align-items:center; justify-content:space-between;
+                flex-wrap:wrap; gap:1rem;">
+        <div>
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:1.4rem;
+                        letter-spacing:1px; margin-bottom:0.25rem;">
+                Invite Friends. Earn Cash.
+            </div>
+            <p style="font-size:0.875rem; opacity:0.85;">
+                Get 20% of every entry fee paid by someone you refer.
+                5 referrals to Tier 1 = free entry.
+            </p>
+        </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'payments:wallet' %}" class="btn"
+           style="background:var(--gold); color:var(--dark);
+                  font-weight:700; white-space:nowrap;">
+            Get Referral Link
+        </a>
+        {% else %}
+        <a href="{% url 'accounts:register' %}" class="btn"
+           style="background:var(--gold); color:var(--dark);
+                  font-weight:700; white-space:nowrap;">
+            Sign Up to Refer
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- TOURNAMENT INFO -->
+{% if tournament %}
+<div class="card">
+    <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.4rem;
+               color:var(--teal); letter-spacing:1px; margin-bottom:0.5rem;">
+        {{ tournament.name }} {{ tournament.year }}
+    </h3>
+    <p style="color:var(--grey); font-size:0.875rem;">
+        United States &bull; Canada &bull; México
+    </p>
+    <div style="display:flex; gap:1rem; margin-top:1.25rem; flex-wrap:wrap;">
+        <a href="{% url 'tournaments:groups' %}" class="btn btn-secondary">
+            View Groups
+        </a>
+        <a href="{% url 'tournaments:fixtures' %}" class="btn btn-outline">
+            View Fixtures
+        </a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

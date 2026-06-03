@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Second Chance Leaderboard — WC2026 Predictor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Second Chance Leaderboard</h1>
+    <p>Fresh knockout competition. Everyone starts equal after the group stage.</p>
+</div>
+
+<!-- NAV TABS -->
+<div style="display:flex; gap:0.5rem; margin-bottom:1.5rem;">
+    <a href="{% url 'leaderboard:home' %}" class="btn btn-outline">Main</a>
+    <a href="{% url 'leaderboard:second_chance' %}" class="btn btn-secondary">
+        Second Chance
+    </a>
+    <a href="{% url 'leaderboard:global' %}" class="btn btn-outline">Global</a>
+</div>
+
+{% if not competition %}
+<div class="card" style="text-align:center; padding:3rem;">
+    <p style="color:var(--grey);">
+        Second Chance competition activates after the group stage ends.
+    </p>
+</div>
+{% else %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th style="width:60px;">Rank</th>
+                <th>Player</th>
+                <th style="text-align:right;">Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr {% if entry.user == request.user %}
+                style="background:#FEF3C7;"
+                {% endif %}>
+                <td>
+                    {% if entry.rank == 1 %}
+                        <span style="font-size:1.25rem;">🥇</span>
+                    {% elif entry.rank == 2 %}
+                        <span style="font-size:1.25rem;">🥈</span>
+                    {% elif entry.rank == 3 %}
+                        <span style="font-size:1.25rem;">🥉</span>
+                    {% elif entry.rank <= 5 %}
+                        <span class="badge badge-gold">{{ entry.rank }}</span>
+                    {% else %}
+                        <span class="badge badge-grey">{{ entry.rank }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <strong>{{ entry.user.username }}</strong>
+                    {% if entry.user == request.user %}
+                        <span style="font-size:0.75rem; color:var(--gold);
+                                     font-weight:600; margin-left:0.5rem;">
+                            You
+                        </span>
+                    {% endif %}
+                </td>
+                <td style="text-align:right;">
+                    <strong style="font-size:1rem; color:var(--teal);">
+                        {{ entry.total_points }}
+                    </strong>
+                    <span style="font-size:0.75rem; color:var(--grey);">pts</span>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="text-align:center;
+                    color:var(--grey); padding:2rem;">
+                    No entries yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

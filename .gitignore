@@ -1,0 +1,14 @@
+# Python environment
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Local database
+db.sqlite3
+
+# Environment variables (Never upload your secret keys!)
+.env
+
+# Static files (optional, depends on your setup)
+staticfiles/

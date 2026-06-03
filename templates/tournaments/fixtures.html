@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Fixtures — WC2026 Predictor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Fixtures</h1>
+    <p>All matches across the tournament.</p>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Home</th>
+                <th>Score</th>
+                <th>Away</th>
+                <th>Stage</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for match in matches %}
+            <tr>
+                <td style="color:var(--grey); font-size:0.8rem;">
+                    {{ match.kickoff_time|date:"d M Y" }}<br>
+                    <span style="font-size:0.75rem;">
+                        {{ match.kickoff_time|date:"H:i" }}
+                    </span>
+                </td>
+                <td>
+                    <strong>{{ match.home_team.flag }} {{ match.home_team.name }}</strong>
+                </td>
+                <td style="text-align:center; font-weight:700; color:var(--teal);">
+                    {% if match.home_score is not None %}
+                        {{ match.home_score }} — {{ match.away_score }}
+                    {% else %}
+                        vs
+                    {% endif %}
+                </td>
+                <td>
+                    <strong>{{ match.away_team.flag }} {{ match.away_team.name }}</strong>
+                </td>
+                <td>
+                    <span class="badge badge-grey">
+                        {{ match.get_stage_display }}
+                    </span>
+                </td>
+                <td>
+                    {% if match.status == 'completed' %}
+                        <span class="badge badge-green">FT</span>
+                    {% elif match.status == 'live' %}
+                        <span class="badge badge-red">LIVE</span>
+                    {% else %}
+                        <span class="badge badge-grey">Soon</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center;
+                    color:var(--grey); padding:2rem;">
+                    No fixtures added yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

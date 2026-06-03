@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Join a Tournament — WC2026 Predictor{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Choose Your Tournament</h1>
+    <p>Pick a tier, pay the entry fee, and compete for prizes.</p>
+</div>
+
+<!-- WALLET BALANCE -->
+<div class="card" style="margin-bottom:1.5rem; display:flex;
+     align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+    <div>
+        <div style="font-size:0.8rem; color:var(--grey); font-weight:600;
+                    text-transform:uppercase; letter-spacing:0.5px;">
+            Wallet Balance
+        </div>
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:2rem;
+                    color:var(--teal);">
+            ₦{{ wallet.balance|floatformat:0 }}
+        </div>
+    </div>
+    <div style="display:flex; gap:0.75rem;">
+        <a href="{% url 'payments:wallet' %}" class="btn btn-outline">
+            My Wallet
+        </a>
+        <a href="{% url 'payments:referrals' %}" class="btn btn-secondary">
+            Referrals
+        </a>
+    </div>
+</div>
+
+{% if has_paid %}
+<div class="card" style="margin-bottom:1.5rem; background:#F0FDF4;
+     border-left:4px solid var(--green);">
+    <p style="font-size:0.875rem; color:#166534;">
+        You have already joined a tier. You can only participate in one tier
+        per tournament.
+    </p>
+</div>
+{% endif %}
+
+<!-- TIERS -->
+<div class="grid-3">
+    {% for tier in tiers %}
+    <div class="card" style="
+        {% if tier.id in paid_tier_ids %}
+            border-top: 4px solid var(--green);
+        {% elif tier.entry_fee == 3000 %}
+            border-top: 4px solid var(--gold);
+        {% else %}
+            border-top: 4px solid var(--teal);
+        {% endif %}
+        text-align: center; padding: 2rem;">
+
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:1.5rem;
+                    color:var(--teal); letter-spacing:1px; margin-bottom:0.5rem;">
+            {{ tier.name }}
+        </div>
+
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:3rem;
+                    color:var(--dark); line-height:1;">
+            ₦{{ tier.entry_fee|floatformat:0 }}
+        </div>
+        <div style="font-size:0.75rem; color:var(--grey); margin-bottom:1.5rem;">
+            entry fee
+        </div>
+
+        <!-- PRIZE BREAKDOWN -->
+        <div style="background:var(--offwhite); border-radius:8px;
+                    padding:1rem; margin-bottom:1.5rem; text-align:left;">
+            <div style="font-size:0.75rem; font-weight:700; color:var(--grey);
+                        text-transform:uppercase; margin-bottom:0.75rem;">
+                Prize Pool (80% of pot)
+            </div>
+            <div style="display:flex; justify-content:space-between;
+                        font-size:0.85rem; margin-bottom:0.4rem;">
+                <span>🥇 1st Place</span>
+                <strong style="color:var(--green);">50%</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;
+                        font-size:0.85rem; margin-bottom:0.4rem;">
+                <span>🥈 2nd Place</span>
+                <strong style="color:var(--grey);">30%</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;
+                        font-size:0.85rem;">
+                <span>🥉 3rd Place</span>
+                <strong style="color:var(--grey);">20%</strong>
+            </div>
+        </div>
+
+        {% if tier.id in paid_tier_ids %}
+            <div class="badge badge-green" style="width:100%; padding:0.75rem;
+                 font-size:0.9rem; border-radius:8px;">
+                ✓ Your Tier
+            </div>
+        {% elif has_paid %}
+            <div class="badge badge-grey" style="width:100%; padding:0.75rem;
+                 font-size:0.9rem; border-radius:8px;">
+                Already in another tier
+            </div>
+        {% else %}
+            <a href="{% url 'payments:checkout' tier.id %}"
+               class="btn btn-primary" style="width:100%; padding:0.75rem;">
+                Join for ₦{{ tier.entry_fee|floatformat:0 }}
+            </a>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="card" style="grid-column:1/-1; text-align:center; padding:3rem;">
+        <p style="color:var(--grey);">No tournament tiers available yet.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- REFERRAL PROMO -->
+<div class="card" style="margin-top:2rem; background:var(--teal);
+                          color:var(--white);">
+    <div style="display:flex; align-items:center; justify-content:space-between;
+                flex-wrap:wrap; gap:1rem;">
+        <div>
+            <div style="font-family:'Bebas Neue',sans-serif; font-size:1.4rem;
+                        letter-spacing:1px; margin-bottom:0.25rem;">
+                Invite Friends. Earn Cash.
+            </div>
+            <p style="font-size:0.875rem; opacity:0.85;">
+                Get 20% of every entry fee paid by someone you refer.
+                5 referrals to Tier 1 = free entry.
+            </p>
+        </div>
+        <a href="{% url 'payments:wallet' %}"
+           class="btn" style="background:var(--gold); color:var(--dark);
+                               font-weight:700; white-space:nowrap;">
+            Get Referral Link
+        </a>
+    </div>
+</div>
+{% endblock %}

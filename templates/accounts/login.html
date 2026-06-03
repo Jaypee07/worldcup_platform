@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Login — WC2026 Predictor{% endblock %}
+
+{% block content %}
+<div style="max-width: 480px; margin: 3rem auto;">
+    <div class="page-header" style="text-align: center;">
+        <h1>Welcome Back</h1>
+        <p>Log in to manage your predictions</p>
+    </div>
+
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Your username" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; padding: 0.75rem;">
+                Log In
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:1.25rem; font-size:0.875rem; color:var(--grey);">
+            No account yet?
+            <a href="{% url 'accounts:register' %}" style="color:var(--teal); font-weight:600;">
+                Join now
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}

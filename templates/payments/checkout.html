@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout — {{ tier.name }}{% endblock %}
+
+{% block content %}
+<div style="max-width:520px; margin:2rem auto;">
+    <div class="page-header">
+        <h1>Checkout</h1>
+        <p>Confirm your entry for {{ tier.name }}</p>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem;">
+        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:1.2rem;
+                   color:var(--teal); margin-bottom:1rem; letter-spacing:1px;">
+            Order Summary
+        </h3>
+        <table>
+            <tr>
+                <td style="color:var(--grey);">Tournament</td>
+                <td><strong>{{ tier.name }}</strong></td>
+            </tr>
+            <tr>
+                <td style="color:var(--grey);">Entry Fee</td>
+                <td><strong>₦{{ tier.entry_fee|floatformat:0 }}</strong></td>
+            </tr>
+            {% if balance_to_use > 0 %}
+            <tr>
+                <td style="color:var(--green);">Wallet Credit</td>
+                <td style="color:var(--green);">
+                    <strong>− ₦{{ balance_to_use|floatformat:0 }}</strong>
+                </td>
+            </tr>
+            {% endif %}
+            <tr style="border-top:2px solid var(--border);">
+                <td><strong>You Pay</strong></td>
+                <td>
+                    <strong style="font-size:1.25rem; color:var(--teal);">
+                        ₦{{ amount_to_pay|floatformat:0 }}
+                    </strong>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {% if wallet.balance > 0 %}
+    <div class="card" style="margin-bottom:1rem; background:#F0FDF4;
+         border-left:4px solid var(--green);">
+        <p style="font-size:0.875rem; color:#166534;">
+            <strong>₦{{ balance_to_use|floatformat:0 }}</strong>
+            will be deducted from your wallet balance of
+            <strong>₦{{ wallet.balance|floatformat:0 }}</strong>.
+        </p>
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'payments:initiate' tier.id %}">
+        {% csrf_token %}
+        {% if amount_to_pay == 0 %}
+            <button type="submit" class="btn btn-primary"
+                    style="width:100%; padding:0.875rem; font-size:1rem;">
+                Complete with Wallet Balance
+            </button>
+        {% else %}
+            <button type="submit" class="btn btn-primary"
+                    style="width:100%; padding:0.875rem; font-size:1rem;">
+                Pay ₦{{ amount_to_pay|floatformat:0 }} with Paystack
+            </button>
+        {% endif %}
+    </form>
+
+    <a href="{% url 'payments:tiers' %}"
+       style="display:block; text-align:center; margin-top:1rem;
+              font-size:0.875rem; color:var(--grey);">
+        ← Back to tiers
+    </a>
+</div>
+{% endblock %}
