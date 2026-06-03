@@ -128,13 +128,10 @@ class Command(BaseCommand):
         self.stdout.write('✓ 12 groups created and assigned')
 
         Competition.objects.get_or_create(
-            type=Competition.Type.MAIN,
-            defaults={'name': 'Main Competition', 'is_active': True}
-        )
-        Competition.objects.get_or_create(
-            type=Competition.Type.SECOND_CHANCE,
-            defaults={'name': 'Second Chance', 'is_active': False}
-        )
+    name='FIFA World Cup 2026',
+    defaults={'is_active': True}
+)
+        
         self.stdout.write('✓ Competitions created')
 
         self.seed_fixtures(tournament, team_objects)
