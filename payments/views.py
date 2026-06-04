@@ -274,3 +274,5 @@ def referrals_view(request):
         'referrals': referrals,
         'total_earned': total_earned,
     })
+
+
